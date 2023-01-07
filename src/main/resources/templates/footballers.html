@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог футболистов 3.0</title>
+</head>
+<body>
+<button type="button"><a th:href="${linkToMainPage}">На главную</a></button>
+
+<h2>Все футболисты</h2>
+<table border="1" th:object="${footballerForm}">
+    <tr>
+        <td>Имя</td>
+        <td>Фамилия</td>
+        <td>Пол</td>
+        <td>Дата рождения</td>
+        <td>Команда</td>
+        <td>Страна</td>
+    </tr>
+    <tr th:each="footballer: ${footballerList}">
+        <td th:text="${footballer.firstName}"></td>
+        <td th:text="${footballer.secondName}"></td>
+        <td th:text="${footballer.sex.name}"></td>
+        <td th:text="${footballer.birthday}"></td>
+        <td th:text="${footballer.teamName}"></td>
+        <td th:text="${footballer.country.name}"></td>
+        <td>
+            <input type="submit" value="Изменить">
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>

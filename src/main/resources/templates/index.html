@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог футболистов 3.0</title>
+</head>
+<body>
+<button type="button"><a th:href="${linkToFootballersPage}">Все футболисты</a></button>
+
+<h2>Добавить нового футболиста</h2>
+<div class="footballer-form">
+    <form action="/form" method="post" th:action="@{/form}" th:object="${footballerForm}">
+        <label for="firstName">Имя:</label><br>
+        <input type="text" id="firstName" name="firstName" th:field="*{firstName}"><br>
+
+        <label for="secondName">Фамилия:</label><br>
+        <input type="text" id="secondName" name="secondName" th:field="*{secondName}"><br>
+
+        <label>Пол:</label><br>
+        <input type="radio" th:field="*{sex}" value="MALE">Мужской
+        <input type="radio" th:field="*{sex}" value="FEMALE">Женский
+        <br>
+
+        <label for="birthday">Дата рождения:</label><br>
+        <input type="date" id="birthday" name="birthday" th:field="*{birthday}"><br>
+
+        <label for="commandName">Название команды:</label><br>
+        <select th:field="*{teamName}">
+            <option th:each="t : ${teams}" th:value="${t}" th:text="${t}"></option>
+        </select>
+        <input type="text" id="commandName" name="commandName" th:field="*{insteadTeamName}"
+               placeholder="Введите своё, если нет в списке"><br>
+
+        <label>Страна:</label><br>
+        <select th:field="*{country}">
+            <option th:each="c : ${countries}" th:value="${c}" th:text="${c.name}"></option>
+        </select><br><br>
+
+        <input type="submit" value="Отправить">
+    </form>
+</div>
+
+
+</body>
+</html>
