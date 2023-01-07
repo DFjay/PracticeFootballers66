@@ -15,13 +15,13 @@ import java.time.LocalDate;
  */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FootballerForm implements Serializable {
-    Integer id;
-
+public class FootballerFormDto {
+    @NotNull
     @NotBlank(message = "Имя не может отсутствовать")
     @Size(max = 255)
     String firstName;
 
+    @NotNull
     @NotBlank(message = "Фамилия не может отсутствовать")
     @Size(max = 255)
     String secondName;

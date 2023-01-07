@@ -1,9 +1,10 @@
 package com.example.practice66ezhikov.controller;
 
-import com.example.practice66ezhikov.dto.FootballerForm;
+import com.example.practice66ezhikov.dto.FootballerFormDto;
+import com.example.practice66ezhikov.dto.FootballerFormForChangeDataDto;
 import com.example.practice66ezhikov.enums.Countries;
-import com.example.practice66ezhikov.enums.Sexes;
 import com.example.practice66ezhikov.service.db.FootballerEntityService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,22 +21,22 @@ public class FootballersPageController {
 
     @GetMapping
     public String getPage(Model model) {
-        model.addAttribute("footballerForm", new FootballerForm());
+        model.addAttribute("footballerForm", new FootballerFormDto());
+        model.addAttribute("changeDataForm", new FootballerFormForChangeDataDto());
         model.addAttribute("footballerList", footballerEntityService.getAllFootballers());
         model.addAttribute("teams", footballerEntityService.getAllTeamNames());
         model.addAttribute("countries", Countries.values());
-        model.addAttribute("sexes", Sexes.values());
         model.addAttribute("linkToMainPage", "/");
         return "footballers";
     }
 
     @PostMapping
-    public String changeFootballerData(FootballerForm modifiedForm) {
-        String insteadTeamName = modifiedForm.getInsteadTeamName();
-        if (!insteadTeamName.isBlank()) {
-            modifiedForm.setTeamName(insteadTeamName);
+    public String changeFootballerData(@Valid FootballerFormForChangeDataDto form) {
+        String insteadTeamName = form.getInsteadTeamName();
+        if (insteadTeamName != null && !insteadTeamName.isBlank()) {
+            form.setTeamName(insteadTeamName);
         }
-        footballerEntityService.updateFootballerInfo(modifiedForm);
+        footballerEntityService.updateFootballerInfo(form);
         return "redirect:/footballers";
     }
 }

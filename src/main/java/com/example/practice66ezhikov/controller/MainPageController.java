@@ -1,6 +1,6 @@
 package com.example.practice66ezhikov.controller;
 
-import com.example.practice66ezhikov.dto.FootballerForm;
+import com.example.practice66ezhikov.dto.FootballerFormDto;
 import com.example.practice66ezhikov.enums.Countries;
 import com.example.practice66ezhikov.service.db.FootballerEntityService;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class MainPageController {
 
     @GetMapping
     public String getPage(Model model) {
-        model.addAttribute("footballerForm", new FootballerForm());
+        model.addAttribute("footballerForm", new FootballerFormDto());
         model.addAttribute("countries", Countries.values());
         model.addAttribute("teams", footballerEntityService.getAllTeamNames());
         model.addAttribute("linkToFootballersPage", "footballers");
@@ -30,9 +30,9 @@ public class MainPageController {
     }
 
     @PostMapping("/form")
-    public String saveNewFootballer(@Valid FootballerForm form) {
+    public String saveNewFootballer(@Valid FootballerFormDto form) {
         String insteadTeamName = form.getInsteadTeamName();
-        if (!insteadTeamName.isBlank()) {
+        if (insteadTeamName != null && !insteadTeamName.isBlank()) {
             form.setTeamName(insteadTeamName);
         }
         footballerEntityService.addFootballer(form);

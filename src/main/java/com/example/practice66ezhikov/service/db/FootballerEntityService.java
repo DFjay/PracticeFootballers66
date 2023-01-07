@@ -1,6 +1,7 @@
 package com.example.practice66ezhikov.service.db;
 
-import com.example.practice66ezhikov.dto.FootballerForm;
+import com.example.practice66ezhikov.dto.FootballerFormDto;
+import com.example.practice66ezhikov.dto.FootballerFormForChangeDataDto;
 import com.example.practice66ezhikov.entity.FootballerEntity;
 import com.example.practice66ezhikov.repo.FootballerEntityRepository;
 import jakarta.transaction.Transactional;
@@ -19,12 +20,12 @@ public class FootballerEntityService {
     FootballerEntityRepository repo;
 
     /**
-     * Add new footballer to db
+     * Добавить нового футболиста в БД
      *
-     * @param form required data about footballer
+     * @param form необходимая информация о футболисте
      */
     @Transactional
-    public void addFootballer(FootballerForm form) {
+    public void addFootballer(FootballerFormDto form) {
         FootballerEntity footballer = FootballerEntity.builder()
                 .firstName(form.getFirstName())
                 .secondName(form.getSecondName())
@@ -37,32 +38,41 @@ public class FootballerEntityService {
         repo.save(footballer);
     }
 
+    /**
+     *
+     * @param form обновленная информация о футболисте
+     * @return true, если футболист был найден, false, если нет
+     */
     @Transactional
-    public Optional<FootballerEntity> getFootballer(Integer id) {
-        return repo.findById(id);
-    }
-
-    @Transactional
-    public boolean updateFootballerInfo(FootballerForm form) {
+    public boolean updateFootballerInfo(FootballerFormForChangeDataDto form) {
         Optional<FootballerEntity> footballerOptional = repo.findById(form.getId());
-        if (footballerOptional.isPresent()) {
-            FootballerEntity footballer = footballerOptional.get();
-            footballer.setFirstName(form.getFirstName());
-            footballer.setSecondName(form.getSecondName());
-            footballer.setSex(form.getSex());
-            footballer.setBirthday(form.getBirthday());
-            footballer.setTeamName(form.getTeamName());
-            footballer.setCountry(form.getCountry());
-            repo.save(footballer);
-            return true;
+        if (footballerOptional.isEmpty()) {
+            return false;
         }
-        return false;
+        FootballerEntity footballer = footballerOptional.get();
+        String firstName = form.getFirstName();
+        if (firstName != null && !firstName.isBlank())
+            footballer.setFirstName(firstName);
+        String secondName = form.getSecondName();
+        if (secondName != null && !secondName.isBlank())
+            footballer.setSecondName(form.getSecondName());
+        if (form.getSex() != null)
+            footballer.setSex(form.getSex());
+        if (form.getBirthday() != null)
+            footballer.setBirthday(form.getBirthday());
+        String teamName = form.getTeamName();
+        if (teamName != null && !teamName.isBlank())
+            footballer.setTeamName(teamName);
+        if (form.getCountry() != null)
+            footballer.setCountry(form.getCountry());
+        repo.save(footballer);
+        return true;
     }
 
     /**
-     * Get all football players
+     * Получить всех футболистов из БД
      *
-     * @return list of all football players
+     * @return список всех футболистов
      */
     @Transactional
     public List<FootballerEntity> getAllFootballers() {
@@ -70,9 +80,9 @@ public class FootballerEntityService {
     }
 
     /**
-     * Get all unique football teams
+     * Получить все названия футбольных команд
      *
-     * @return list of all football teams
+     * @return список футбольных команд
      */
     @Transactional
     public List<String> getAllTeamNames() {

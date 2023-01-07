@@ -10,6 +10,7 @@
 <h2>Все футболисты</h2>
 <table border="1" th:object="${footballerForm}">
     <tr>
+        <td>ID</td>
         <td>Имя</td>
         <td>Фамилия</td>
         <td>Пол</td>
@@ -18,17 +19,58 @@
         <td>Страна</td>
     </tr>
     <tr th:each="footballer: ${footballerList}">
-        <td th:text="${footballer.firstName}"></td>
-        <td th:text="${footballer.secondName}"></td>
-        <td th:text="${footballer.sex.name}"></td>
-        <td th:text="${footballer.birthday}"></td>
-        <td th:text="${footballer.teamName}"></td>
-        <td th:text="${footballer.country.name}"></td>
-        <td>
-            <input type="submit" value="Изменить">
+        <td th:text="${footballer.id}">
         </td>
+        <td th:text="${footballer.firstName}">
+        </td>
+        <td th:text="${footballer.secondName}">
+        </td>
+        <td th:text="${footballer.sex.name}">
+        </td>
+        <td th:text="${footballer.birthday}">
+        </td>
+        <td th:text="${footballer.teamName}">
+        </td>
+        <td th:text="${footballer.country.name}">
+        </td>
+
     </tr>
 </table>
+<div>
+    <h3>Введите новые значения в нужные поля, чтобы изменить данные</h3>
+    <form method="post" th:action="@{/footballers}" th:object="${changeDataForm}">
+        <label for="firstName">ID футболиста:</label><br>
+        <input type="text" id="id" name="id" th:field="*{id}"><br>
+
+        <label for="firstName">Имя:</label><br>
+        <input type="text" id="firstName" name="firstName" th:field="*{firstName}"><br>
+
+        <label for="secondName">Фамилия:</label><br>
+        <input type="text" id="secondName" name="secondName" th:field="*{secondName}"><br>
+
+        <label>Пол:</label><br>
+        <input type="radio" th:field="*{sex}" value="MALE">Мужской
+        <input type="radio" th:field="*{sex}" value="FEMALE">Женский
+        <br>
+
+        <label for="birthday">Дата рождения:</label><br>
+        <input type="date" id="birthday" name="birthday" th:field="*{birthday}"><br>
+
+        <label for="commandName">Название команды:</label><br>
+        <select th:field="*{teamName}">
+            <option th:each="t : ${teams}" th:value="${t}" th:text="${t}"></option>
+        </select>
+        <input type="text" id="commandName" name="commandName" th:field="*{insteadTeamName}"
+               placeholder="Введите своё, если нет в списке"><br>
+
+        <label>Страна:</label><br>
+        <select th:field="*{country}">
+            <option th:each="c : ${countries}" th:value="${c}" th:text="${c.name}"></option>
+        </select><br><br>
+
+        <input type="submit" value="Отправить">
+    </form>
+</div>
 
 
 </body>
